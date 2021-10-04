@@ -31,11 +31,11 @@ def main():
     data_sniffer = DaedalusSniffer()
 
     ignored_paths = (
-        "/_intern/",
-        "/AI/AI_Intern/",
-        "/AI/Test_Skripts/",
-        "/Story/Text.d",
-        "/Story/U_LoadingScreen.d",
+        "/_INTERN/",
+        "/AI/AI_INTERN/",
+        "/AI/TEST_SKRIPTS/",
+        "/STORY/TEXT.D",
+        "/STORY/U_LOADINGSCREEN.D",
     )
 
     walked_paths = set()
@@ -44,7 +44,7 @@ def main():
         if file_path in walked_paths:
             continue
         walked_paths.add(file_path)
-        short_path = file_path.split('/Scripts/Content')[-1]
+        short_path = file_path.upper().replace('\\', '/').split('/SCRIPTS/CONTENT')[-1]
         if any(short_path.startswith(path) for path in ignored_paths):
             continue
         if args.verbose:
