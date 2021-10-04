@@ -36,9 +36,16 @@ def main():
         "/AI/TEST_SKRIPTS/",
         "/STORY/TEXT.D",
         "/STORY/U_LOADINGSCREEN.D",
+        "/STORY/B_STORY/B_LOGENTRY.D",
+        "/STORY/B_STORY/DK/B_DIALOG_FUNCTIONS.D",
+        "/STORY/B_STORY/B_TEACHATTRIBUTEPOINTS.D",
+        "/STORY/B_STORY/B_TEACHFIGHTTALENTPERCENT.D",
+        "/STORY/B_STORY/B_TEACHTHIEFTALENT.D",
     )
 
     walked_paths = set()
+
+    file_2_texts = []
 
     for i, file_path in enumerate(files_paths, start=1):
         if file_path in walked_paths:
@@ -47,12 +54,27 @@ def main():
         short_path = file_path.upper().replace('\\', '/').split('/SCRIPTS/CONTENT')[-1]
         if any(short_path.startswith(path) for path in ignored_paths):
             continue
+
         if args.verbose:
             print(f'\r{i}/{len(files_paths)} {file_path}')
+
         try:
-            data_sniffer.sniff(file_path)
+            texts = data_sniffer.sniff(file_path)
         except UnicodeDecodeError:
+            texts = []
             print('UnicodeDecodeError')
+
+        file_2_texts.append((short_path, texts))
+
+    # print('\n'*10)  # TODO comment this and below
+    # file_2_texts.sort(key=lambda row: len(row[1]))
+    # for short_path, texts in file_2_texts:
+    #     if len(texts) == 0:
+    #         continue
+    #     print(len(texts), short_path)
+    #     for line in texts:
+    #         print(line)
+    #     print('\n')
 
 
 if __name__ == '__main__':

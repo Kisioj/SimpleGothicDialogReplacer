@@ -30,15 +30,20 @@ class DaedalusSniffer:
         if listener.errors_count:
             msg = f"{listener.errors_count} syntax error generated"
             print(msg, file=sys.stderr)
-            return
+            return []
 
         sniffing_visitor = SniffingVisitor(file_path, lines)
         sniffing_visitor.visit(parse_tree)
 
         self.texts.extend(sniffing_visitor.texts)
 
-        with open(file_path, 'w', encoding='windows-1250') as file:
-            file.write('\n'.join(lines))
+        if sniffing_visitor.texts:
+            with open(file_path, 'w', encoding='windows-1250') as file:
+                file.write('\n'.join(lines))
+
+        return sniffing_visitor.texts
+
+
 
 
 IGNORE_FUNCTIONS = {
@@ -166,7 +171,7 @@ class SniffingVisitor(DaedalusVisitor):
             if (text.upper()[-5:] in IGNORE_TRAILINGS) or text.startswith('"$') or '_' in text or '}}' in text:
                 return
 
-            print(f'{text}\t\t\t\t\t\t\t\t\t\t({self.short_path}:{ctx.stop.line}')
+            # print(f'{text}\t\t\t\t\t\t\t\t\t\t({self.short_path}:{ctx.stop.line}')
             stripped_text = text.strip('"')
             self.texts.append((stripped_text, f':{ctx.stop.line}'))
             self.lines[ctx.stop.line - 1] = self.lines[ctx.stop.line - 1].replace(text, f'"{{{{{stripped_text}}}}}"')
