@@ -3,3 +3,6 @@ pip install -r reqs.txt
 
 2. Run Script:
 python main.py "/PATH/TO/Scripts/Content/Gothic.src" --verbose
+
+3. To remove curly braces:
+python remover.py "PATH/TO/Scripts/"
